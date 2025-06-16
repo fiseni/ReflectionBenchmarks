@@ -61,6 +61,16 @@ public class Benchmark0_Include
         return result;
     }
 
+    [Benchmark]
+    public object Custom5()
+    {
+        var result = _queryable
+            .IncludeCustom5(x => x.Company)
+            .ThenIncludeCustom5<Store, Company, Country>(x => x.Country);
+
+        return result;
+    }
+
     public static void PrintOutput()
     {
         var benchmark0 = new Benchmark0_Include();
@@ -75,5 +85,7 @@ public class Benchmark0_Include
         //Console.WriteLine(((IQueryable<Store>)benchmark.Custom3()).ToQueryString());
         Console.WriteLine();
         Console.WriteLine(((IQueryable<Store>)benchmark0.Custom4()).ToQueryString());
+        Console.WriteLine();
+        Console.WriteLine(((IQueryable<Store>)benchmark0.Custom5()).ToQueryString());
     }
 }
