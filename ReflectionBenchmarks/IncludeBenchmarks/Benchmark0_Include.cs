@@ -66,20 +66,14 @@ public class Benchmark0_Include
         var benchmark0 = new Benchmark0_Include();
         benchmark0.Setup();
 
-        var efCoreResult = benchmark0.EFCore();
-        var custom1Result = benchmark0.Custom1();
-        var custom2Result = benchmark0.Custom2();
-        //var custom3Result = benchmark.Custom3();
-        var custom4Result = benchmark0.Custom4();
-
-        Console.WriteLine(((IQueryable<Store>)efCoreResult).ToQueryString());
+        Console.WriteLine(((IQueryable<Store>)benchmark0.EFCore()).ToQueryString());
         Console.WriteLine();
-        Console.WriteLine(((IQueryable<Store>)custom1Result).ToQueryString());
+        Console.WriteLine(((IQueryable<Store>)benchmark0.Custom1()).ToQueryString());
         Console.WriteLine();
-        Console.WriteLine(((IQueryable<Store>)custom2Result).ToQueryString());
+        Console.WriteLine(((IQueryable<Store>)benchmark0.Custom2()).ToQueryString());
         //Console.WriteLine();
-        //Console.WriteLine(((IQueryable<Store>)custom3Result).ToQueryString());
+        //Console.WriteLine(((IQueryable<Store>)benchmark.Custom3()).ToQueryString());
         Console.WriteLine();
-        Console.WriteLine(((IQueryable<Store>)custom4Result).ToQueryString());
+        Console.WriteLine(((IQueryable<Store>)benchmark0.Custom4()).ToQueryString());
     }
 }

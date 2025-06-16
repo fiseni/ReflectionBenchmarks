@@ -39,12 +39,10 @@ public class Benchmark1_Like
     {
         var benchmark = new Benchmark1_Like();
         benchmark.Setup();
-        var efLike = benchmark.EFCore();
-        var custom2Like = benchmark.Custom1();
 
-        Console.WriteLine(((IQueryable<Store>)efLike).ToQueryString());
+        Console.WriteLine(((IQueryable<Store>)benchmark.EFCore()).ToQueryString());
         Console.WriteLine();
-        Console.WriteLine(((IQueryable<Store>)custom2Like).ToQueryString());
+        Console.WriteLine(((IQueryable<Store>)benchmark.Custom1()).ToQueryString());
         Console.WriteLine();
     }
 }
