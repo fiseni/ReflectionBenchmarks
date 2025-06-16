@@ -76,6 +76,8 @@ public class Benchmark2_Order
         Console.WriteLine();
         Console.WriteLine(((IQueryable<Store>)benchmark.Custom1()).ToQueryString());
         Console.WriteLine();
+        Console.WriteLine(((IQueryable<Store>)benchmark.Custom2()).ToQueryString());
+        Console.WriteLine();
         Console.WriteLine(((IQueryable<Store>)benchmark.Custom3()).ToQueryString());
         Console.WriteLine();
         Console.WriteLine(((IQueryable<Store>)benchmark.Custom4()).ToQueryString());
@@ -84,7 +86,5 @@ public class Benchmark2_Order
         Console.WriteLine();
         Console.WriteLine(((IQueryable<Store>)benchmark.Custom6()).ToQueryString());
         Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine(((IQueryable<Store>)benchmark.Custom6()).ToQueryString());
     }
 }

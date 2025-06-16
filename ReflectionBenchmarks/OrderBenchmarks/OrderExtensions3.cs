@@ -27,8 +27,7 @@ public static class OrderExtensions3
         this IQueryable<T> source,
         Expression<Func<T, object?>> keySelector)
     {
-        // By recreating the Lambda, the return type is back to the original type
-        var expr = Expression.Lambda(keySelector.Body, keySelector.Parameters);
+        var expr = RemoveConvert(keySelector);
         var cacheKey = new CacheKey(typeof(T), expr.ReturnType);
         var del = _cachedDelegates.GetOrAdd(cacheKey, CreateOrderByDelegate);
         return (IQueryable<T>)del(source, expr);
@@ -38,7 +37,7 @@ public static class OrderExtensions3
         this IQueryable<T> source,
         Expression<Func<T, object?>> keySelector)
     {
-        var expr = Expression.Lambda(keySelector.Body, keySelector.Parameters);
+        var expr = RemoveConvert(keySelector);
         var cacheKey = new CacheKey(typeof(T), expr.ReturnType);
         var del = _cachedDelegates.GetOrAdd(cacheKey, CreateThenByDelegate);
         return (IQueryable<T>)del(source, expr);
@@ -70,5 +69,18 @@ public static class OrderExtensions3
         );
         var lambda = Expression.Lambda<Func<IQueryable, LambdaExpression, IQueryable>>(call, sourceParam, exprParam);
         return lambda.Compile();
+    }
+
+    private static LambdaExpression RemoveConvert(LambdaExpression source)
+    {
+        var body = source.Body;
+
+        while (body is UnaryExpression expr &&
+            (expr.NodeType == ExpressionType.Convert || expr.NodeType == ExpressionType.ConvertChecked))
+        {
+            body = expr.Operand;
+        }
+
+        return Expression.Lambda(body, source.Parameters);
     }
 }

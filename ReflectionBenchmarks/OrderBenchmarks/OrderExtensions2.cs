@@ -23,8 +23,7 @@ public static class OrderExtensions2
         this IQueryable<T> source,
         Expression<Func<T, object?>> keySelector)
     {
-        // By recreating the Lambda, the return type is back to the original type
-        var expr = Expression.Lambda(keySelector.Body, keySelector.Parameters);
+        var expr = RemoveConvert(keySelector);
         var mi = _orderByMethod.MakeGenericMethod(typeof(T), expr.ReturnType);
         var result = (IQueryable<T>)mi.Invoke(null, [source, expr])!;
         return result;
@@ -34,10 +33,22 @@ public static class OrderExtensions2
         this IQueryable<T> source,
         Expression<Func<T, object?>> keySelector)
     {
-        // By recreating the Lambda, the return type is back to the original type
-        var expr = Expression.Lambda(keySelector.Body, keySelector.Parameters);
+        var expr = RemoveConvert(keySelector);
         var mi = _thenByMethod.MakeGenericMethod(typeof(T), expr.ReturnType);
         var result = (IQueryable<T>)mi.Invoke(null, [source, expr])!;
         return result;
+    }
+
+    private static LambdaExpression RemoveConvert(LambdaExpression source)
+    {
+        var body = source.Body;
+
+        while (body is UnaryExpression expr &&
+            (expr.NodeType == ExpressionType.Convert || expr.NodeType == ExpressionType.ConvertChecked))
+        {
+            body = expr.Operand;
+        }
+
+        return Expression.Lambda(body, source.Parameters);
     }
 }
